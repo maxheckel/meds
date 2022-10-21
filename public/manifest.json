@@ -1,0 +1,19 @@
+{
+    "name": "Meds PWA",
+    "short_name": "Meds PWA",
+    "icons": [
+        {
+            "src": "/icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "scope": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#000",
+    "description": "Med tracker",
+    "dir": "ltr",
+    "lang": "en-US"
+}

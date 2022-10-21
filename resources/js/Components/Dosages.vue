@@ -10,7 +10,7 @@
 <template>
     <div>
         <div v-for="dosage in dosages">
-            <div>{{dosage.medication.name}} <span class="text-sm text-teal-500"> (<a :href="route('dosage.edit', dosage.id)">Edit</a>)</span> </div>
+            <div class="text-2xl font-bold">{{dosage.medication.name}} <span class="text-sm text-teal-500"> (<a :href="route('dosage.edit', dosage.id)">Edit</a>)</span> </div>
             <div class="uppercase">
                 Take {{dosage.multiplier}}x/{{dosage.amount}} {{dosage.interval}}
                 <span v-if="dosage.interval === 'weekly'">

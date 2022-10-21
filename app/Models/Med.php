@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Med extends Model
 {
+    public $fillable = [
+        'name'
+    ];
     use HasFactory;
 }

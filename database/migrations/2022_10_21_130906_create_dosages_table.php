@@ -15,23 +15,26 @@ return new class extends Migration
     {
         Schema::create('dosages', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->timestamps();
             $table->foreignIdFor(\App\Models\User::class);
             $table->foreignIdFor(\App\Models\Med::class);
 
-            // Take 4 2mg doses every 1 *days*
+            // Take 4 2mg doses every *day*
             $table->enum('interval', ['daily', 'weekly', 'monthly']);
 
-            // Take 4 *2mg* doses every 1 days
+            // Take 4 *2mg* doses every day
             $table->string('amount');
             $table->date('start');
             $table->date('end')->nullable();
 
-            // Take 4 2mg doses every *1* days
-            $table->float('cadence');
+            // Take 4 2mg doses every *monday and friday*
+            $table->string('dotw')->nullable();
 
-            // Take *4* 2mg doses every 1 days
+            // Take *4* 2mg doses every day
             $table->float('multiplier');
+
+            $table->string('instructions')->nullable();
         });
     }
 

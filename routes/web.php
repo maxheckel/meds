@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\DosageController;
+use App\Http\Controllers\MedsController;
+use App\Models\Dosage;
+use Carbon\Carbon;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,13 +21,15 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+    if (Auth::check()){
+        return redirect('/dashboard');
+    }
+    return Inertia::render('Auth/Login', [
+        'canResetPassword' => Route::has('login'),
     ]);
 });
+
+
 
 Route::middleware([
     'auth:sanctum',
@@ -30,6 +37,22 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        $dosages = Dosage::where('user_id', Auth::id())->with([
+            'medication',
+            'takes' => function($q) {
+                $q->whereDate('taken_at', Carbon::today() );
+            }
+        ])->whereDate('start', '<=', Carbon::today())->where(function($q){
+            $q->whereDate('end', '>', Carbon::today())->orWhereNull('end');
+        })->get();
+
+        return Inertia::render('Dashboard', [
+            'dosages' => $dosages
+        ]);
     })->name('dashboard');
+
+    Route::resource('meds', MedsController::class);
+    Route::resource('dosage', DosageController::class);
+    Route::post('/doeses/{id}/take', [DosageController::class, 'takeDose'])->name('doses.take');
+    Route::delete('/takes/{id}', [DosageController::class, 'untakeDose'])->name('doses.untake');
 });

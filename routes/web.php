@@ -37,13 +37,15 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
+
+
         $dosages = Dosage::where('user_id', Auth::id())->with([
             'medication',
             'takes' => function($q) {
-                $q->whereDate('taken_at', Carbon::today() );
+                $q->whereDate('taken_at', Carbon::now(Auth::user()->timezone)->format('Y-m-d') );
             }
-        ])->whereDate('start', '<=', Carbon::today())->where(function($q){
-            $q->whereDate('end', '>', Carbon::today())->orWhereNull('end');
+        ])->whereDate('start', '<=', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->where(function($q){
+            $q->whereDate('end', '>', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->orWhereNull('end');
         })->get();
 
         return Inertia::render('Dashboard', [

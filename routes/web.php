@@ -42,10 +42,10 @@ Route::middleware([
         $dosages = Dosage::where('user_id', Auth::id())->with([
             'medication',
             'takes' => function($q) {
-                $q->whereDate('taken_at', Carbon::now(Auth::user()->timezone)->format('Y-m-d') );
+                $q->whereDate('taken_at', Carbon::today() );
             }
-        ])->whereDate('start', '<=', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->where(function($q){
-            $q->whereDate('end', '>', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->orWhereNull('end');
+        ])->whereDate('start', '<=', Carbon::today())->where(function($q){
+            $q->whereDate('end', '>', Carbon::today())->orWhereNull('end');
         })->get();
 
         return Inertia::render('Dashboard', [

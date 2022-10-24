@@ -45,7 +45,7 @@ Route::middleware([
                 $q->whereDate('taken_at', '>=', Carbon::now(Auth::user()->timezone)->startOfDay()->tz('UTC') )->whereDate('taken_at', '<=', Carbon::now(Auth::user()->timezone)->endOfDay()->tz('UTC') );
             }
         ])->whereDate('start', '<=', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->where(function($q){
-            $q->whereDate('end', '>', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->orWhereNull('end');
+            $q->whereDate('end', '>=', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->orWhereNull('end');
         })->get();
 
         return Inertia::render('Dashboard', [

@@ -47,7 +47,7 @@ Route::middleware([
         ])->whereDate('start', '<=', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->where(function($q){
             $q->whereDate('end', '>', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->orWhereNull('end');
         })->get();
-
+        dd($dosages);
         return Inertia::render('Dashboard', [
             'dosages' => $dosages
         ]);

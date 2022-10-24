@@ -42,7 +42,7 @@ Route::middleware([
         $dosages = Dosage::where('user_id', Auth::id())->with([
             'medication',
             'takes' => function($q) {
-                $q->whereDate('taken_at', '>=', Carbon::now()->startOfDay()->tz(Auth::user()->timezone))->whereDate('taken_at', "<=", Carbon::now()->endOfDay()->tz(Auth::user()->timezone))->limit(4);
+                $q->whereDate('taken_at', Carbon::now(Auth::user()->timezone)->format('Y-m-d') )->limit(4);
             }
         ])->whereDate('start', '<=', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->where(function($q){
             $q->whereDate('end', '>', Carbon::now(Auth::user()->timezone)->format('Y-m-d'))->orWhereNull('end');

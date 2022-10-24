@@ -47,7 +47,7 @@ Route::middleware([
         ])->whereDate('start', '<=', Carbon::today())->where(function($q){
             $q->whereDate('end', '>', Carbon::today())->orWhereNull('end');
         })->get();
-        dd($dosages);
+
         return Inertia::render('Dashboard', [
             'dosages' => $dosages
         ]);
